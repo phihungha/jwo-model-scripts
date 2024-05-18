@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "merl-preprocessing"
+version = "0.1.0"
+description = ""
+authors = ["Ha Phi Hung <haphihung55@gmail.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+scipy = "^1.13.0"
+pandas = "^2.2.2"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.4.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
