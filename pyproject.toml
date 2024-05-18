@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "merl-preprocessing"
+name = "jwo-model-scripts"
 version = "0.1.0"
 description = ""
 authors = ["Ha Phi Hung <haphihung55@gmail.com>"]
