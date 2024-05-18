@@ -5,17 +5,18 @@ from pathlib import Path
 from typing import Sequence
 import scipy.io
 
-VIDEO_DIR_PATH = Path(
-    "/mnt/media/Dev/KLTN/Videos_MERL_Shopping_Dataset/Videos_MERL_Shopping_Dataset"
-)
+DATASET_PATH = Path("/mnt/media/Dev/jwo-cv-data/merl-shopping-dataset-original")
+
+LABEL_DIR_PATH = DATASET_PATH / "Labels_MERL_Shopping_Dataset"
+VIDEO_DIR_PATH = DATASET_PATH / "Videos_MERL_Shopping_Dataset"
 VIDEO_FILE_NAME_FORMAT = "{video_name}_crop.mp4"
 FRAME_RATE = 30
-LABEL_DIR_PATH = Path("/mnt/media/Dev/KLTN/Labels_MERL_Shopping_Dataset")
 
-OUTPUT_VIDEO_DIR_PATH = Path("/mnt/media/Dev/KLTN/MERL-Dataset")
-OUTPUT_VIDEO_EXT = "mp4"
+OUTPUT_DATASET_PATH = Path("/mnt/media/Dev/jwo-cv-data/merl-shopping-dataset")
 ONLY_OUTPUT_LABEL = False
-OUTPUT_LABEL_PATH = Path("/mnt/media/Dev/KLTN/MERL-Dataset/labels.csv")
+OUTPUT_LABEL_PATH = OUTPUT_DATASET_PATH / "labels.csv"
+OUTPUT_VIDEO_DIR_PATH = OUTPUT_DATASET_PATH
+OUTPUT_VIDEO_EXT = "mp4"
 
 
 def get_time_from_frame_number(frame_number: int) -> float:
@@ -90,14 +91,14 @@ for path in LABEL_DIR_PATH.glob("*.mat"):
     mat = scipy.io.loadmat(path)
     mat = mat["tlabs"]
 
-    pick_frames = mat[0][0]
+    pick_frames = mat[1][0]
     output_video_names = create_clips(video_name, pick_frames, "0_pick")
     for name in output_video_names:
         labels["video_name"].append(name)
         labels["class"].append(0)
         labels["label"].append("pick")
 
-    return_frames = mat[1][0]
+    return_frames = mat[0][0]
     output_video_names = create_clips(video_name, return_frames, "1_return")
     for name in output_video_names:
         labels["video_name"].append(name)
@@ -105,4 +106,4 @@ for path in LABEL_DIR_PATH.glob("*.mat"):
         labels["label"].append("return")
 
 pandas.DataFrame(labels).to_csv(OUTPUT_LABEL_PATH)
-print(f"Saved label to {OUTPUT_LABEL_PATH}.")
+print(f"Saved labels to {OUTPUT_LABEL_PATH}.")
