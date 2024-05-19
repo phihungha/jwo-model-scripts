@@ -17,13 +17,13 @@ OUTPUT_CLIP_DIR_PATH = OUTPUT_DATASET_PATH
 OUTPUT_CLIP_EXT = ".mp4"
 
 
-def get_secs_from_frame_num(
-    video_path: Path, start_frame: any, end_frame: any
+def get_secs_from_frame_nums(
+    video_path: Path, start_frame_num: any, end_frame_num: any
 ) -> float:
     result = ffmpeg.probe(str(video_path))
     fps = int(Fraction(result["streams"][0]["avg_frame_rate"]))
-    start_secs = int(start_frame) / fps
-    end_secs = int(end_frame) / fps
+    start_secs = int(start_frame_num) / fps
+    end_secs = int(end_frame_num) / fps
     return start_secs, end_secs
 
 
@@ -39,14 +39,14 @@ def extract_clips_from_video(
         print(f"Extracting clip {start_end_frame} of {video_name}.")
 
         try:
-            start_time, end_time = get_secs_from_frame_num(
+            start_secs, end_secs = get_secs_from_frame_nums(
                 video_path, start_end_frame[0], start_end_frame[1]
             )
         except ffmpeg.Error as err:
             print(f"Failed to read {video_path}: {err.stderr}")
             continue
 
-        if start_time == end_time:
+        if start_secs == end_secs:
             print(
                 f"Clip {start_end_frame} has the same start and end frame in {video_name}. Skipping."
             )
@@ -58,7 +58,7 @@ def extract_clips_from_video(
 
         try:
             (
-                ffmpeg.input(video_path, ss=start_time, to=end_time)
+                ffmpeg.input(video_path, ss=start_secs, to=end_secs)
                 .output(str(clip_output_path))
                 .overwrite_output()
                 .run(quiet=True)
