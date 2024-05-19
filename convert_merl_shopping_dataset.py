@@ -1,8 +1,9 @@
-from pathlib import Path
 from fractions import Fraction
+from pathlib import Path
 from typing import Sequence
-import scipy.io
+
 import ffmpeg
+import scipy.io
 
 DATASET_PATH = Path("/mnt/media/Dev/jwo-cv-data/merl-shopping-dataset-original")
 
